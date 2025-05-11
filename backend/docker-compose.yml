@@ -1,0 +1,32 @@
+services:
+  #MongoDB service 
+  mongo:
+    image: mongo
+    container_name: course-db
+    ports:
+      - "27027:27017"
+
+    volumes:
+      - mongo-db:/data/db
+    networks:
+      - backend-network
+  
+  #Backend node.js service 
+  backend:
+    build:
+      context: .
+      # dockerfile: development
+    container_name: course-docker
+    ports:
+      - "3001:3000"
+    depends_on:
+      - mongo
+    networks:
+      - backend-network
+    volumes:
+      - .:/usr/src/app
+volumes:
+  mongo-db:
+
+networks:
+  backend-network:
